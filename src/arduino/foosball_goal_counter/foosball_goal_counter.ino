@@ -10,7 +10,7 @@ bool is_connected[] = {0, 0, 0, 0};
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(250000);
   for  (int i = power_pin_from ; i < power_pin_from + (sensor_count * 2); i++) {
     pinMode(i, OUTPUT);
   }
@@ -25,7 +25,7 @@ void loop() {
       bool result = detect(i , state);
       if (state != result) {
         is_connected[i] = result;
-        time = millis();
+        time = micros();
         send(i, result);
       }
     }
@@ -60,6 +60,8 @@ void commands() {
 
 int detect(int pin, bool is_connected ) {
   int sensorValue = analogRead(pin);
+  
+  // Serial.println(sensorValue);
   if (is_connected && sensorValue > threshold) {
     return false;
   }
